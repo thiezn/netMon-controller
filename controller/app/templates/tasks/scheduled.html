@@ -1,0 +1,31 @@
+<!-- extend from base layout -->
+{% extends "base.html" %}
+{% block content %}
+{% include "tasks/navigation.html" %}
+
+<table border=1 cellpadding=10>
+    <tr>
+        <th>Type</th>
+        <th>recurrence time (sec)</th>
+        <th>recurrece count</th>
+        <th>destination</th>
+        <th>details</th>
+    </tr>
+    {% for task in tasks %}
+        <tr>
+            <td>{{ task.type }}</td>
+            <td>{{ task.recurrence_time }}</td>
+            <td>{{ task.recurrence_count }}</td>
+            {% if task.type == 'GetPage' %}
+                <td>{{ task.url }}</td>
+            {% else %}
+                <td>{{ task.device }}</td>
+            {% endif %}
+            <td><a href="{{ url_for('tasks.get_task', task_id=task._id) }}">link</a></td>
+        </tr>
+    {% else %}
+        <tr><td>No tasks found</td></tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

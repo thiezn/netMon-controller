@@ -1,0 +1,36 @@
+<!-- extend from base layout -->
+{% extends "base.html" %}
+{% block content %}
+{% include "tasks/navigation.html" %}
+
+{% if error %}
+<b><font color="red">{{ error }}</font></b>
+{% endif %}
+
+
+<form action="{{ url_for('tasks.delete_task') }}" method="POST" class="form-horizontal">
+<!-- Form Name -->
+<legend>Add scheduled task</legend>
+
+<div class="form-group  {% if form.task_id.errors %} has-error {% endif %}" id="task_id">
+    <div class="col-sm-2">
+        {{ form.task_id.label}}
+    </div>
+    <div class="col-sm-5">
+        {{ form.task_id(cols="50") }}
+    </div>
+    <div class="help-block col-sm-3">
+        {{ form.task_id.errors[0] }}
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-3">
+        <input type="submit" class="btn btn-primary" category="submit" value="Add"></input>
+    </div>
+</div>
+
+</form>
+
+{% endblock %}

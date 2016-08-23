@@ -1,0 +1,19 @@
+<!-- extend from base layout -->
+{% extends "base.html" %}
+{% block content %}
+{% include "inventory/navigation.html" %}
+
+<table border=1>
+{% for id, device in devices.items() %}
+    {% for key, value in device.items() %}
+        <tr>
+            <th>{{ key }}</th>
+            <td>{{ value }}</td>
+        </tr>
+    {% endfor %}
+{% else %}
+    <tr><td>No devices found</td></tr>
+{% endfor %}
+</table>
+
+{% endblock %}

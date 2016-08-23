@@ -1,0 +1,36 @@
+<!-- extend from base layout -->
+{% extends "base.html" %}
+{% block content %}
+{% include "inventory/navigation.html" %}
+
+{% if error %}
+<b><font color="red">{{ error }}</font></b>
+{% endif %}
+
+
+<form action="{{ url_for('inventory.delete_device') }}" method="POST" class="form-horizontal">
+<!-- Form Name -->
+<legend>Delete device from inventory</legend>
+
+<div class="form-group  {% if form.device_id.errors %} has-error {% endif %}" id="device_id">
+    <div class="col-sm-2">
+        {{ form.device_id.label}}
+    </div>
+    <div class="col-sm-5">
+        {{ form.device_id(cols="50") }}
+    </div>
+    <div class="help-block col-sm-3">
+        {{ form.device_id.errors[0] }}
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-3">
+        <input type="submit" class="btn btn-primary" category="submit" value="Delete"></input>
+    </div>
+</div>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+<!-- extend from base layout -->
+{% extends "base.html" %}
+{% block content %}
+{% include "tasks/navigation.html" %}
+
+<table border=1>
+{% for result in results %}
+    <tr>
+      {% for key, value in result.items() %}
+            <th>{{ key }}</th>
+            <td>{{ value }}</td>
+      {% endfor %}
+    </tr>
+{% else %}
+    <tr><td>No results found</td></tr>
+{% endfor %}
+</table>
+
+{% endblock %}
