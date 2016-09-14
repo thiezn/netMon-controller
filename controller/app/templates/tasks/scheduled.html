@@ -10,6 +10,7 @@
         <th>recurrece count</th>
         <th>destination</th>
         <th>details</th>
+        <th>Poller</th>
     </tr>
     {% for task in tasks %}
         <tr>
@@ -22,6 +23,7 @@
                 <td>{{ task.device }}</td>
             {% endif %}
             <td><a href="{{ url_for('tasks.get_task', task_id=task._id) }}">link</a></td>
+            <td>{{ task.poller }}</td>
         </tr>
     {% else %}
         <tr><td>No tasks found</td></tr>

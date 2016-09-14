@@ -8,7 +8,7 @@ import json
 
 
 mod_tasks = Blueprint('tasks', __name__, url_prefix='/tasks')
-task_handler = TaskHandler()
+task_handler = TaskHandler(pollers=[('127.0.0.1', 9090), ('127.0.0.1', 9091)])
 database = Database()
 
 

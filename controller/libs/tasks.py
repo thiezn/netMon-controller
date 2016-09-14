@@ -75,26 +75,25 @@ class TaskHandler:
 
     def _url(self, partial_url):
         """ Creates a full url """
-
         return ["http://{}:{}/{}".format(*poller, partial_url) for poller in self.pollers]
-        #return "{}{}".format(self._BASE_URL, partial_url)
 
     def _get(self, url):
         """ GET Request to REST API """
         poller_urls = self._url(url)
+        results = []
 
         for poller_url in poller_urls:
             try:
                 response = self.session.get(poller_url)
             except requests.exceptions.ConnectionError:
-                return {'error': 'Could not establish session with {}'
-                                 .format(poller_url)}
+                results.append({'poller': poller_urls, 'error': 'Could not establish session with {}'.format(poller_url)})
 
             if response.status_code != 200:
-                return {'error': "{}: {}".format(response.status_code,
-                                                 response.content)}
+                results.append({'poller': poller_urls, 'error': "{}: {}".format(response.status_code, response.content)})
             else:
-                return json.loads(response.text)
+                results.extend(json.loads(response.text))
+
+        return results
 
     def _post(self, url, payload):
         """ POST Request to REST API """
@@ -120,7 +119,6 @@ class TaskHandler:
     def _delete(self, url, payload=None):
         """ DELETE request to REST API """
         poller_urls = self._url(url)
-        print(poller_urls)
 
         for poller_url in poller_urls:
             try:
