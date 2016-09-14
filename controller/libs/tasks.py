@@ -60,7 +60,6 @@ class TaskHandler:
         # TODO: Currently only supporting a single poller
         self.pollers = pollers
         self.tasks = {}
-        self._BASE_URL = "http://{}:{}/".format(*pollers[0])
         proxies = {"http": None, "https": None}
         self.session = requests.Session()
         self.session.proxies = proxies
@@ -76,54 +75,66 @@ class TaskHandler:
 
     def _url(self, partial_url):
         """ Creates a full url """
-        return "{}{}".format(self._BASE_URL, partial_url)
+
+        return ["http://{}:{}/{}".format(*poller, partial_url) for poller in self.pollers]
+        #return "{}{}".format(self._BASE_URL, partial_url)
 
     def _get(self, url):
         """ GET Request to REST API """
-        try:
-            response = self.session.get(self._url(url))
-        except requests.exceptions.ConnectionError:
-            return {'error': 'Could not establish session with {}'
-                             .format(self._url(url))}
+        poller_urls = self._url(url)
 
-        if response.status_code != 200:
-            return {'error': "{}: {}".format(response.status_code,
-                                             response.content)}
-        else:
-            return json.loads(response.text)
+        for poller_url in poller_urls:
+            try:
+                response = self.session.get(poller_url)
+            except requests.exceptions.ConnectionError:
+                return {'error': 'Could not establish session with {}'
+                                 .format(poller_url)}
+
+            if response.status_code != 200:
+                return {'error': "{}: {}".format(response.status_code,
+                                                 response.content)}
+            else:
+                return json.loads(response.text)
 
     def _post(self, url, payload):
         """ POST Request to REST API """
-        try:
-            response = self.session.post(self._url(url),
-                                         data=json.dumps(payload))
-        except requests.exceptions.ConnectionError:
-            return {'error': 'Could not establish session with {}'
-                             .format(self._url(url))}
+        poller_urls = self._url(url)
 
-        if response.status_code == 200:
-            return json.loads(response.text)
+        for poller_url in poller_urls:
+            try:
+                response = self.session.post(poller_url,
+                                             data=json.dumps(payload))
+            except requests.exceptions.ConnectionError:
+                return {'error': 'Could not establish session with {}'
+                                 .format(poller_url)}
 
-        if response.status_code != 204:
-            return {'error': "{}: {}".format(response.status_code,
-                                             response.content)}
-        else:
-            return None
+            if response.status_code == 200:
+                return json.loads(response.text)
+
+            if response.status_code != 204:
+                return {'error': "{}: {}".format(response.status_code,
+                                                 response.content)}
+            else:
+                return None
 
     def _delete(self, url, payload=None):
         """ DELETE request to REST API """
-        try:
-            response = self.session.delete(self._url(url),
-                                           data=json.dumps(payload))
-        except requests.exceptions.ConnectionError:
-            return {'error': 'Could not establish session with {}'
-                             .format(self._url(url))}
+        poller_urls = self._url(url)
+        print(poller_urls)
 
-        if response.status_code != 204:
-            return {'error': "{}: {}".format(response.status_code,
-                                             response.content)}
-        else:
-            None
+        for poller_url in poller_urls:
+            try:
+                response = self.session.delete(poller_url,
+                                               data=json.dumps(payload))
+            except requests.exceptions.ConnectionError:
+                return {'error': 'Could not establish session with {}'
+                                 .format(poller_url)}
+
+            if response.status_code != 204:
+                return {'error': "{}: {}".format(response.status_code,
+                                                 response.content)}
+            else:
+                None
 
     def _put(self, url, payload):
         """ PUT Request to REST API """
