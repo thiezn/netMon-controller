@@ -5,11 +5,8 @@
 
 <table border=1>
 {% for result in results %}
+    {{ result }}
     <tr>
-      {% for key, value in result.items() %}
-            <th>{{ key }}</th>
-            <td>{{ value }}</td>
-      {% endfor %}
     </tr>
 {% else %}
     <tr><td>No results found</td></tr>

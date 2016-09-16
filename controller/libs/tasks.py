@@ -86,13 +86,16 @@ class TaskHandler:
             try:
                 response = self.session.get(poller_url)
             except requests.exceptions.ConnectionError:
-                results.append({'poller': poller_urls, 'error': 'Could not establish session with {}'.format(poller_url)})
+                results.append({'poller': poller_url, 'error': 'Could not establish session with {}'.format(poller_url)})
 
             if response.status_code != 200:
-                results.append({'poller': poller_urls, 'error': "{}: {}".format(response.status_code, response.content)})
+                results.append({'poller': poller_url, 'error': "{}: {}".format(response.status_code, response.content)})
             else:
-                results.extend(json.loads(response.text))
+                data = json.loads(response.text)
+                results.extend(data)
 
+
+        print(results)
         return results
 
     def _post(self, url, payload):

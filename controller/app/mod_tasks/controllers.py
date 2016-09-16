@@ -24,10 +24,11 @@ def get_tasks():
 @mod_tasks.route('/<task_id>', methods=['GET'])
 def get_task(task_id):
     task = task_handler.get_task(task_id)
+    print(task)
     return render_template('tasks/task.html',
                            title='Task',
                            task=task,
-                           data=json.dumps(task['results']))
+                           data=task[task_id])
 
 
 @mod_tasks.route('/results', methods=['GET'])
