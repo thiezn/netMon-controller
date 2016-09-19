@@ -92,10 +92,12 @@ class TaskHandler:
                 results.append({'poller': poller_url, 'error': "{}: {}".format(response.status_code, response.content)})
             else:
                 data = json.loads(response.text)
-                results.extend(data)
 
+                if isinstance(data, dict):
+                    results.extend([data])
+                else:
+                    results.extend(data)
 
-        print(results)
         return results
 
     def _post(self, url, payload):

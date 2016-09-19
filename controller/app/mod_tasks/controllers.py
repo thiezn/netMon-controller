@@ -4,7 +4,6 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from libs.tasks import TaskHandler, form_to_json_task
 from libs.database import Database
 from .forms import AddTask, DeleteTask
-import json
 
 
 mod_tasks = Blueprint('tasks', __name__, url_prefix='/tasks')
@@ -23,12 +22,16 @@ def get_tasks():
 
 @mod_tasks.route('/<task_id>', methods=['GET'])
 def get_task(task_id):
-    task = task_handler.get_task(task_id)
-    print(task)
+    """Returns a single task
+    
+    :return: List of the Task on each poller
+    """
+    tasks = task_handler.get_task(task_id)
+    data={'results': 'Dummy'}
     return render_template('tasks/task.html',
                            title='Task',
-                           task=task,
-                           data=task[task_id])
+                           tasks=tasks,
+                           data=data)
 
 
 @mod_tasks.route('/results', methods=['GET'])

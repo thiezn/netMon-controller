@@ -7,6 +7,9 @@
 {% block content %}
 {% include "tasks/navigation.html" %}
 
+{% for task in tasks %}
+
+<h2>Poller {{task.poller}}</h2>
 <table>
     <tr><th colspan=2>{{ task.type }}</th></tr>
     <tr><th>recurrence time</th><td>{{ task.recurrence_time }} sec</td></tr>
@@ -19,6 +22,8 @@
     {% endif %}
 </table>
 <hr>
+
+{% endfor %}
 
 <svg id="visualisation" width="1000" height="250"></svg>
 
