@@ -7,22 +7,24 @@
 {% block content %}
 {% include "tasks/navigation.html" %}
 
-{% for task in tasks %}
-
-<h2>Poller {{task.poller}}</h2>
 <table>
-    <tr><th colspan=2>{{ task.type }}</th></tr>
-    <tr><th>recurrence time</th><td>{{ task.recurrence_time }} sec</td></tr>
-    <tr><th>recurrence count</th><td>{{ task.recurrence_count }}</td></tr>
-    {% if task.type == 'Ping' %}
-    <tr><th>device</th><td>{{ task.device }}</td></tr>
-    {% elif task.type == 'InterfaceOctetsProbe' %}
-    <tr><th>device</th><td>{{ task.device }}</td></tr>
-    <tr><th>if_index</th><td>{{ task.if_index }}</td></tr>
+    <tr><th>ID</th><td>{{tasks[0]._id }}</td></tr>
+    <tr><th>Type</th><td>{{ tasks[0].type }}</td></tr>
+    <tr><th>recurrence time</th><td>{{ tasks[0].recurrence_time }} sec</td></tr>
+    <tr><th>recurrence count</th><td>{{ tasks[0].recurrence_count }}</td></tr>
+    {% if tasks[0].type == 'GetPage' %}
+        <tr><th>URL</th><td>{{ tasks[0].url }}</td></tr>
+    {% else %}
+        <tr><th>device</th><td>{{ tasks[0].device }}</td></tr>
+    {% endif %}
+    {% if tasks[0].type == 'InterfaceOctetsProbe' %}
+        <tr><th>if_index</th><td>{{ tasks[0].if_index }}</td></tr>
     {% endif %}
 </table>
 <hr>
 
+{% for task in tasks %}
+   HERE WE NEED TO PARSE THE DATA FROM THE DIFFERENT POLLERS
 {% endfor %}
 
 <svg id="visualisation" width="1000" height="250"></svg>

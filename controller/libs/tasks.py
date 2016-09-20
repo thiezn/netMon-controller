@@ -60,6 +60,7 @@ class TaskHandler:
         # TODO: Currently only supporting a single poller
         self.pollers = pollers
         self.tasks = {}
+        self._last_task_id = 0
         proxies = {"http": None, "https": None}
         self.session = requests.Session()
         self.session.proxies = proxies
@@ -67,7 +68,10 @@ class TaskHandler:
 
     def generate_task_id(self, new_task):
         """ Returns a new unique task id """
-        return b64encode(pickle.dumps(new_task)).decode('utf-8')
+        self._last_task_id += 1
+        return str(self._last_task_id)
+
+        #return b64encode(pickle.dumps(new_task)).decode('utf-8')
 
     def reverse_task_id(self, task_id):
         """ Returns the original task dict """
@@ -79,65 +83,67 @@ class TaskHandler:
 
     def _get(self, url):
         """ GET Request to REST API """
-        poller_urls = self._url(url)
+        urls = self._url(url)
         results = []
 
-        for poller_url in poller_urls:
+        for url in urls:
             try:
-                response = self.session.get(poller_url)
-            except requests.exceptions.ConnectionError:
-                results.append({'poller': poller_url, 'error': 'Could not establish session with {}'.format(poller_url)})
+                response = self.session.get(url)
 
-            if response.status_code != 200:
-                results.append({'poller': poller_url, 'error': "{}: {}".format(response.status_code, response.content)})
-            else:
-                data = json.loads(response.text)
-
-                if isinstance(data, dict):
-                    results.extend([data])
+                if response.status_code != 200:
+                    results.append({'poller': url, 'error': "{}: {}".format(response.status_code, response.content)})
                 else:
-                    results.extend(data)
+                    # TODO big mess here, we want to always get a list
+                    # and manual adding of pollers is terrible as well
+                    data = json.loads(response.text)
+
+                    if isinstance(data, dict):
+                        data['poller'] = url
+                        results.extend([data])
+                    else:
+                        for item in data:
+                            item['poller'] = url
+                        results.extend(data)
+
+            except requests.exceptions.ConnectionError:
+                results.append({'poller': url, 'error': 'Could not establish session with {}'.format(url)})
 
         return results
 
     def _post(self, url, payload):
         """ POST Request to REST API """
-        poller_urls = self._url(url)
+        urls = self._url(url)
+        results = []
 
-        for poller_url in poller_urls:
+        for url in urls:
             try:
-                response = self.session.post(poller_url,
-                                             data=json.dumps(payload))
+                response = self.session.post(url, data=json.dumps(payload))
             except requests.exceptions.ConnectionError:
-                return {'error': 'Could not establish session with {}'
-                                 .format(poller_url)}
-
+                results.append({'poller': url, 'error': 'Could not establish session with {}'.format(url)})
             if response.status_code == 200:
-                return json.loads(response.text)
+                data = json.loads(response.text)
+                data['poller'] = url
+                results.append(data)
 
             if response.status_code != 204:
-                return {'error': "{}: {}".format(response.status_code,
-                                                 response.content)}
+                results.append({'poller': url, 'error': "{}: {}".format(response.status_code, response.content)})
             else:
-                return None
+                results.append({'poller': url})
 
     def _delete(self, url, payload=None):
         """ DELETE request to REST API """
-        poller_urls = self._url(url)
+        urls = self._url(url)
 
-        for poller_url in poller_urls:
+        for url in urls:
             try:
-                response = self.session.delete(poller_url,
-                                               data=json.dumps(payload))
-            except requests.exceptions.ConnectionError:
-                return {'error': 'Could not establish session with {}'
-                                 .format(poller_url)}
+                response = self.session.delete(url, data=json.dumps(payload))
+                if response.status_code != 204:
+                   pass
+                   # return {'error': "{}: {}".format(response.status_code, response.content)}
 
-            if response.status_code != 204:
-                return {'error': "{}: {}".format(response.status_code,
-                                                 response.content)}
-            else:
-                None
+            except requests.exceptions.ConnectionError:
+                pass 
+                #return {'error': 'Could not establish session with {}'.format(url)}
 
     def _put(self, url, payload):
         """ PUT Request to REST API """
@@ -189,7 +195,20 @@ class TaskHandler:
 
         :param pollers: list of pollers to query, None=query all
         """
-        return self._get('tasks')
+        tasks = self._get('tasks')
+        dict_of_tasks = {}
+
+        for task in tasks:
+            if '_id' in task:
+                if task['_id'] in dict_of_tasks:
+                    dict_of_tasks[task['_id']].append(task)
+                else:
+                    dict_of_tasks[task['_id']] = [task]
+            else:
+                # Ignore errors for now
+                pass
+
+        return dict_of_tasks
 
     def get_results(self, pollers=None):
         """ Retrieve all results from scheduled tasks on poller(s)

@@ -68,16 +68,8 @@ def update_task(task_id):
     pass
 
 
-@mod_tasks.route('/delete', methods=['GET', 'POST'])
-def delete_task():
-    form = DeleteTask(request.form)
+@mod_tasks.route('/delete/<task_id>', methods=['GET', 'POST'])
+def delete_task(task_id):
+    result = task_handler.delete_task(task_id)
+    return redirect(url_for('tasks.get_tasks'))
 
-    if request.method == 'POST' and form.validate():
-        result = task_handler.delete_task(form.task_id.data)
-        if result and 'error' in result:
-            return render_template('tasks/delete.html',
-                                   form=form,
-                                   error=result['error'])
-        return redirect(url_for('tasks.get_tasks'))
-
-    return render_template('tasks/delete.html', form=form)

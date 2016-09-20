@@ -4,13 +4,8 @@
 {% include "inventory/navigation.html" %}
 
 <table border=1>
-{% for id, device in devices.items() %}
-    {% for key, value in device.items() %}
-        <tr>
-            <th>{{ key }}</th>
-            <td>{{ value }}</td>
-        </tr>
-    {% endfor %}
+{% for device in devices %}
+    {{ device }}
 {% else %}
     <tr><td>No devices found</td></tr>
 {% endfor %}
