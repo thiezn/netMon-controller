@@ -182,15 +182,19 @@ class TaskHandler:
         """
         return self._get('tasks/{}'.format(task_id))
 
-    def get_result(self, task_id, pollers=None):
+    def get_result(self, task_id):
         """ Retrieve the results of a scheduled task on poller(s)
 
         :param task_id: the ID of the task to retrieve results for
         :param pollers: list of pollers to query, None=query all
         """
-        pass
+        # TODO Very inefficient as we query for all results
+        results = self._get('results')
 
-    def get_tasks(self, pollers=None):
+        return [result for result in results
+                       if task_id in result]
+
+    def get_tasks(self):
         """ Retrieve all scheduled tasks on poller(s)
 
         :param pollers: list of pollers to query, None=query all
@@ -210,7 +214,7 @@ class TaskHandler:
 
         return dict_of_tasks
 
-    def get_results(self, pollers=None):
+    def get_results(self):
         """ Retrieve all results from scheduled tasks on poller(s)
 
         :param pollers: list of pollers to query, None=query all

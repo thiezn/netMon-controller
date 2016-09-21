@@ -23,11 +23,11 @@ def get_tasks():
 @mod_tasks.route('/<task_id>', methods=['GET'])
 def get_task(task_id):
     """Returns a single task
-    
+
     :return: List of the Task on each poller
     """
     tasks = task_handler.get_task(task_id)
-    data={'results': 'Dummy'}
+    data = task_handler.get_result(task_id)
     return render_template('tasks/task.html',
                            title='Task',
                            tasks=tasks,
