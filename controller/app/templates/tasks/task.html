@@ -2,103 +2,53 @@
 {% extends "base.html" %}
 
 < <!-- add d3 from web -->
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+{% block loadscripts %}
+<link href="/static/css/c3.min.css" rel="stylesheet" type="text/css">
+<script src="/static/js/c3.min.js" charset="utf-8"></script>
+{% endblock %}
 
 {% block content %}
 {% include "tasks/navigation.html" %}
 
+<!-- <div id="chart"></div> -->
+
 <table>
-    <tr><th colspan=2>{{ task.type }}</th></tr>
-    <tr><th>recurrence time</th><td>{{ task.recurrence_time }} sec</td></tr>
-    <tr><th>recurrence count</th><td>{{ task.recurrence_count }}</td></tr>
-    {% if task.type == 'Ping' %}
-    <tr><th>device</th><td>{{ task.device }}</td></tr>
-    {% elif task.type == 'InterfaceOctetsProbe' %}
-    <tr><th>device</th><td>{{ task.device }}</td></tr>
-    <tr><th>if_index</th><td>{{ task.if_index }}</td></tr>
+    <tr><th>ID</th><td>{{tasks[0]._id }}</td></tr>
+    <tr><th>Type</th><td>{{ tasks[0].type }}</td></tr>
+    <tr><th>recurrence time</th><td>{{ tasks[0].recurrence_time }} sec</td></tr>
+    <tr><th>recurrence count</th><td>{{ tasks[0].recurrence_count }}</td></tr>
+    {% if tasks[0].type == 'GetPage' %}
+        <tr><th>URL</th><td>{{ tasks[0].url }}</td></tr>
+    {% else %}
+        <tr><th>device</th><td>{{ tasks[0].device }}</td></tr>
+    {% endif %}
+    {% if tasks[0].type == 'InterfaceOctetsProbe' %}
+        <tr><th>if_index</th><td>{{ tasks[0].if_index }}</td></tr>
     {% endif %}
 </table>
 <hr>
 
-<svg id="visualisation" width="1000" height="250"></svg>
+<div id="task"></div>
 
 
 <script language="javascript">
 
-var lineData = [{
-  x: 1,
-  y: 5
-}, {
-  x: 20,
-  y: 20
-}, {
-  x: 40,
-  y: 10
-}, {
-  x: 60,
-  y: 40
-}, {
-  x: 80,
-  y: 5
-}, {
-  x: 100,
-  y: 60
-}];
-
-
-var vis = d3.select('#visualisation'),
-    WIDTH = 1000,
-    HEIGHT = 250,
-    MARGINS = {
-      top: 20,
-      right: 20,
-      bottom: 20,
-      left: 50
+var chart = c3.generate({
+    bindto: '#task',
+    data: {
+        json: {{ data[0][tasks[0]._id]|safe }},
+        keys: {
+            value: ['min', 'max', 'avg'],
+        }
     },
-    xRange = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min({{data|safe}}, function(d) {
-      return d.end_timestamp;
-    }), d3.max({{data|safe}}, function(d) {
-      return d.end_timestamp;
-    })]),
-    yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min({{data|safe}}, function(d) {
-      return d.avg;
-    }), d3.max({{data|safe}}, function(d) {
-      return d.avg;
-    })]),
-    xAxis = d3.svg.axis()
-      .scale(xRange)
-      .tickSize(5)
-      .tickSubdivide(true),
-    yAxis = d3.svg.axis()
-      .scale(yRange)
-      .tickSize(5)
-      .orient('left')
-      .tickSubdivide(true);
+    axis: {
+        x: {
+            count: 8
+        }
+    }
+});
 
-vis.append('svg:g')
-  .attr('class', 'x axis')
-  .attr('transform', 'translate(0,' + (HEIGHT - MARGINS.bottom) + ')')
-  .call(xAxis);
-
-vis.append('svg:g')
-  .attr('class', 'y axis')
-  .attr('transform', 'translate(' + (MARGINS.left) + ',0)')
-  .call(yAxis);
-
-var lineFunc = d3.svg.line()
-  .x(function(d) {
-    return xRange(d.end_timestamp);
-  })
-  .y(function(d) {
-    return yRange(d.avg);
-  })
-  .interpolate('linear');
-
-vis.append('svg:path')
-  .attr('d', lineFunc({{data|safe}}))
-  .attr('stroke', 'blue')
-  .attr('stroke-width', 2)
-  .attr('fill', 'none');
 
 </script>
 

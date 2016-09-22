@@ -4,11 +4,10 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from libs.tasks import TaskHandler, form_to_json_task
 from libs.database import Database
 from .forms import AddTask, DeleteTask
-import json
 
 
 mod_tasks = Blueprint('tasks', __name__, url_prefix='/tasks')
-task_handler = TaskHandler()
+task_handler = TaskHandler(pollers=[('127.0.0.1', 9090), ('127.0.0.1', 9091)])
 database = Database()
 
 
@@ -23,11 +22,16 @@ def get_tasks():
 
 @mod_tasks.route('/<task_id>', methods=['GET'])
 def get_task(task_id):
-    task = task_handler.get_task(task_id)
+    """Returns a single task
+
+    :return: List of the Task on each poller
+    """
+    tasks = task_handler.get_task(task_id)
+    data = task_handler.get_result(task_id)
     return render_template('tasks/task.html',
                            title='Task',
-                           task=task,
-                           data=json.dumps(task['results']))
+                           tasks=tasks,
+                           data=data)
 
 
 @mod_tasks.route('/results', methods=['GET'])
@@ -64,16 +68,8 @@ def update_task(task_id):
     pass
 
 
-@mod_tasks.route('/delete', methods=['GET', 'POST'])
-def delete_task():
-    form = DeleteTask(request.form)
+@mod_tasks.route('/delete/<task_id>', methods=['GET', 'POST'])
+def delete_task(task_id):
+    result = task_handler.delete_task(task_id)
+    return redirect(url_for('tasks.get_tasks'))
 
-    if request.method == 'POST' and form.validate():
-        result = task_handler.delete_task(form.task_id.data)
-        if result and 'error' in result:
-            return render_template('tasks/delete.html',
-                                   form=form,
-                                   error=result['error'])
-        return redirect(url_for('tasks.get_tasks'))
-
-    return render_template('tasks/delete.html', form=form)

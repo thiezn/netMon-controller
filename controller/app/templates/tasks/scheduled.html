@@ -5,26 +5,30 @@
 
 <table border=1 cellpadding=10>
     <tr>
-        <th>Type</th>
+        <th>type</th>
         <th>recurrence time (sec)</th>
-        <th>recurrece count</th>
+        <th>recurrence count</th>
         <th>destination</th>
         <th>details</th>
+        <th>poller</th>
+        <th>delete</th>
     </tr>
-    {% for task in tasks %}
+    {% for task_id, data in tasks.items() %}
         <tr>
-            <td>{{ task.type }}</td>
-            <td>{{ task.recurrence_time }}</td>
-            <td>{{ task.recurrence_count }}</td>
-            {% if task.type == 'GetPage' %}
-                <td>{{ task.url }}</td>
+            <td>{{ data[0].type }}</td>
+            <td>{{ data[0].recurrence_time }}</td>
+            <td>{% if data[0].recurrence_count %}{{ data[0].recurrence_count }}{% else %}Infinite{% endif %}</td>
+            {% if data[0].type == 'GetPage' %}
+                <td>{{ data[0].url }}</td>
             {% else %}
-                <td>{{ task.device }}</td>
+                <td>{{ data[0].device }}</td>
             {% endif %}
-            <td><a href="{{ url_for('tasks.get_task', task_id=task._id) }}">link</a></td>
+            <td><a href="{{ url_for('tasks.get_task', task_id=task_id) }}">details</a></td>
+            <td>{% for poller in data %}{{poller.poller}}<br>{% endfor %}</td>
+            <td><a href="{{ url_for('tasks.delete_task', task_id=task_id) }}">delete</a></td>
         </tr>
     {% else %}
-        <tr><td>No tasks found</td></tr>
+        <tr><td colspan=6>No tasks found</td></tr>
     {% endfor %}
 </table>
 
