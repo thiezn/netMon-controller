@@ -44,8 +44,21 @@ var chart = c3.generate({
     },
     axis: {
         x: {
+            label: {
+                text: "date",
+                position: "outside-middle",
+            },
             count: 8
+        },
+        y: {
+            label: {
+                text: "ms",
+                position: "outside-middle",
+            }
         }
+    },
+    legend: {
+        position: "right"
     }
 });
 
