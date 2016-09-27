@@ -113,14 +113,11 @@
     <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
-            <li class="active">
-                <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+            <li {%- if request.path == url_for('home') %} class="active" {% endif %}>
+                <a href="{{ url_for('home') }}"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
             </li>
-            <li>
-                <a href="tasks/"><i class="fa fa-fw fa-bar-chart-o"></i> Tasks</a>
-            </li>
-            <li>
-                <a href="inventory/"><i class="fa fa-fw fa-table"></i> Inventory</a>
+            <li  {%- if request.path == url_for('tasks.get_tasks') %} class="active" {% endif %}>
+                <a href="{{ url_for('tasks.get_tasks') }}"><i class="fa fa-fw fa-bar-chart-o"></i> Tasks</a>
             </li>
             <li>
                 <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>
@@ -132,12 +129,6 @@
                         <a href="#">Dropdown Item</a>
                     </li>
                 </ul>
-            </li>
-            <li>
-                <a href="blank-page.html"><i class="fa fa-fw fa-file"></i> Blank Page</a>
-            </li>
-            <li>
-                <a href="index-rtl.html"><i class="fa fa-fw fa-dashboard"></i> RTL Dashboard</a>
             </li>
         </ul>
     </div>

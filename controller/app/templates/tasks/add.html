@@ -1,14 +1,18 @@
 <!-- extend from base layout -->
 {% extends "base.html" %}
 {% block content %}
+<div class="row">
 {% include "tasks/navigation.html" %}
+</div>
 
 {% if error %}
-<b><font color="red">{{ error }}</font></b>
+<div class="row">
+    <b><font color="red">{{ error }}</font></b>
+</div>
 {% endif %}
 
 
-
+<div class="row">
 <form action="{{ url_for('tasks.add_tasks') }}" method="POST" class="form-horizontal">
 <!-- Form Name -->
 <legend>Add scheduled task</legend>
@@ -119,7 +123,7 @@
 
 </form>
 
-<div id="test"></div>
+</div>  <!-- /.row -->
 
 {% endblock %}
 

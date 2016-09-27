@@ -3,15 +3,14 @@
 {% block content %}
 {% include "tasks/navigation.html" %}
 
-<table border=1 cellpadding=10>
+<table class="table table-condensed">
     <tr>
         <th>type</th>
         <th>recurrence time (sec)</th>
         <th>recurrence count</th>
         <th>destination</th>
-        <th>details</th>
         <th>poller</th>
-        <th>delete</th>
+        <th></th>
     </tr>
     {% for task_id, data in tasks.items() %}
         <tr>
@@ -23,9 +22,11 @@
             {% else %}
                 <td>{{ data[0].device }}</td>
             {% endif %}
-            <td><a href="{{ url_for('tasks.get_task', task_id=task_id) }}">details</a></td>
             <td>{% for poller in data %}{{poller.poller}}<br>{% endfor %}</td>
-            <td><a href="{{ url_for('tasks.delete_task', task_id=task_id) }}">delete</a></td>
+            <td>
+                <a href="{{ url_for('tasks.get_task', task_id=task_id) }}" class="btn btn-info">details</a>
+                <a href="{{ url_for('tasks.delete_task', task_id=task_id) }}" class="btn btn-danger">X</a>
+            </td>
         </tr>
     {% else %}
         <tr><td colspan=6>No tasks found</td></tr>
