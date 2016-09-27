@@ -1,8 +1,6 @@
 <!-- extend from base layout -->
 {% extends "base.html" %}
 
-< <!-- add d3 from web -->
-
 {% block loadscripts %}
 <link href="/static/css/c3.min.css" rel="stylesheet" type="text/css">
 <script src="/static/js/c3.min.js" charset="utf-8"></script>
@@ -11,26 +9,27 @@
 {% block content %}
 {% include "tasks/navigation.html" %}
 
-<!-- <div id="chart"></div> -->
-
-<table>
-    <tr><th>ID</th><td>{{tasks[0]._id }}</td></tr>
-    <tr><th>Type</th><td>{{ tasks[0].type }}</td></tr>
-    <tr><th>recurrence time</th><td>{{ tasks[0].recurrence_time }} sec</td></tr>
-    <tr><th>recurrence count</th><td>{{ tasks[0].recurrence_count }}</td></tr>
-    {% if tasks[0].type == 'GetPage' %}
-        <tr><th>URL</th><td>{{ tasks[0].url }}</td></tr>
-    {% else %}
-        <tr><th>device</th><td>{{ tasks[0].device }}</td></tr>
-    {% endif %}
-    {% if tasks[0].type == 'InterfaceOctetsProbe' %}
-        <tr><th>if_index</th><td>{{ tasks[0].if_index }}</td></tr>
-    {% endif %}
-</table>
-<hr>
-
-<div id="task"></div>
-
+<div class="row">
+    <div class="col-lg-3">
+        <table class="table table-condensed">
+            <tr><th>ID</th><td>{{tasks[0]._id }}</td></tr>
+            <tr><th>Type</th><td>{{ tasks[0].type }}</td></tr>
+            <tr><th>recurrence time</th><td>{{ tasks[0].recurrence_time }} sec</td></tr>
+            <tr><th>recurrence count</th><td>{{ tasks[0].recurrence_count }}</td></tr>
+            {% if tasks[0].type == 'GetPage' %}
+                <tr><th>URL</th><td>{{ tasks[0].url }}</td></tr>
+            {% else %}
+                <tr><th>device</th><td>{{ tasks[0].device }}</td></tr>
+            {% endif %}
+            {% if tasks[0].type == 'InterfaceOctetsProbe' %}
+                <tr><th>if_index</th><td>{{ tasks[0].if_index }}</td></tr>
+            {% endif %}
+        </table>
+    </div>
+    <div class="col-lg-9">
+        <div id="task"></div>
+    </div>
+</div>
 
 <script language="javascript">
 
