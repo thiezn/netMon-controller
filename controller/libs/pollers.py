@@ -2,11 +2,13 @@
 
 from time import time
 
+pollers = {}
+
 
 class Poller:
     """A single poller connection"""
 
-    def __init__(self, ip, port, name=None):
+    def __init__(self, ip, port, name=None, keepalive_interval=None):
         """ Initialise task handler
 
         :param ip: Poller IP address
@@ -18,7 +20,12 @@ class Poller:
         self.name = name
         self.online_since = time()
         self.last_keepalive = time()
-        self.keepalive_interval = 120
+
+        if keepalive_interval:
+            self.keepalive_interval = keepalive_interval
+        else:
+            self.keepalive_interval = 120
+
         self._is_online = True
 
     @property

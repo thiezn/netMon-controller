@@ -52,13 +52,13 @@ def form_to_json_task(form):
 class TaskHandler:
     """ Manage scheduled tasks on poller(s) and retrieve the results """
 
-    def __init__(self, pollers=[("127.0.0.1", 9090)]):
+    def __init__(self):
         """ Initialise task handler
 
         :param pollers: List of pollers. Poller is a tuple of (ip, port)
         """
         # TODO: Currently only supporting a single poller
-        self.pollers = pollers
+        self.pollers = []
         self.tasks = {}
         self._last_task_id = 0
         proxies = {"http": None, "https": None}
@@ -220,3 +220,7 @@ class TaskHandler:
         :param pollers: list of pollers to query, None=query all
         """
         return self._get('results')
+
+
+# Main application task handler
+task_handler = TaskHandler()
