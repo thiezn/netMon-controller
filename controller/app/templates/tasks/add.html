@@ -114,7 +114,9 @@
 <div class="form-group">
     <div class="col-sm-2"></div>
     <div class="col-sm-3">
-        <input type="submit" class="btn btn-primary" category="submit" value="Add"></input>
+        <input type="button" class="btn-xs btn-danger" value="Cancel" onclick="location.href = '{{ url_for('tasks.get_tasks') }}';">
+        <input type="submit" name="submit" class="btn-xs btn-primary" category="submit" value="Repeat"></input>
+        <input type="submit" name="submit" class="btn-xs btn-primary" category="submit" value="Add"></input>
     </div>
 </div>
 
