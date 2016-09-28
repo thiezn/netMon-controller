@@ -17,13 +17,13 @@
                 <th>Online since</th>
                 <th>Last keepalive</th>
             </tr>
-            {% for poller in pollers %}
+            {% for poller_name, poller in pollers.items() %}
                 <tr>
                     <td>{{ poller.name }}</td>
                     <td>{{ poller.ip }}</td>
                     <td>{{ poller.port }}</td>
                     <td>
-                        {% if poller.online %}
+                        {% if poller.is_online %}
                             <span class="label label-success">Online</span>
                         {% else %}
                             <span class="label label-danger">Offline</span>
