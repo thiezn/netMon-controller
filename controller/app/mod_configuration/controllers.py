@@ -6,5 +6,5 @@ mod_configuration = Blueprint('configuration', __name__, url_prefix='/configurat
 
 
 @mod_configuration.route('/', methods=['GET'])
-def get_configuration():
+def home():
     return render_template('configuration/index.html')

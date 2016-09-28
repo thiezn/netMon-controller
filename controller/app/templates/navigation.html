@@ -119,6 +119,12 @@
             <li  {%- if request.path == url_for('tasks.get_tasks') %} class="active" {% endif %}>
                 <a href="{{ url_for('tasks.get_tasks') }}"><i class="fa fa-fw fa-bar-chart-o"></i> Tasks</a>
             </li>
+            <li  {%- if request.path == url_for('pollers.home') %} class="active" {% endif %}>
+                <a href="{{ url_for('pollers.home') }}"><i class="fa fa-fw fa-bar-chart-o"></i> Pollers</a>
+            </li>
+            <li  {%- if request.path == url_for('configuration.home') %} class="active" {% endif %}>
+                <a href="{{ url_for('configuration.home') }}"><i class="fa fa-fw fa-bar-chart-o"></i> Configuration</a>
+            </li>
             <li>
                 <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>
                 <ul id="demo" class="collapse">
