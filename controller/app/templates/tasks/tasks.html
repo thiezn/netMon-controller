@@ -1,0 +1,48 @@
+<!-- extend from base layout -->
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-9">
+        <h2>All Tasks</h2>
+    </div>
+    <div class="col-lg-3" align="right">
+        <a href="{{ url_for('tasks.add_tasks') }}" class="btn btn-primary">Add task</a>
+    </div>
+</div>
+
+<div class="row">
+   <table class="table table-condensed">
+        <tr>
+            <th>type</th>
+            <th>recurrence time (sec)</th>
+            <th>recurrence count</th>
+            <th>destination</th>
+            <th>poller</th>
+            <th></th>
+        </tr>
+        {% for task_id, data in tasks.items() %}
+            <tr>
+                <td>{{ data[0].type }}</td>
+                <td>{{ data[0].recurrence_time }}</td>
+                <td>{% if data[0].recurrence_count %}{{ data[0].recurrence_count }}{% else %}Infinite{% endif %}</td>
+                {% if data[0].type == 'GetPage' %}
+                    <td>{{ data[0].url }}</td>
+                {% else %}
+                    <td>{{ data[0].device }}</td>
+                {% endif %}
+                <td>{% for poller in data %}{{poller.poller}}<br>{% endfor %}</td>
+                <td>
+                    <div class="btn-group-xs" role="group" aria-label="taskcontrol">
+                        <a href="{{ url_for('tasks.get_task', task_id=task_id) }}" class="btn btn-primary">details</a>
+                        <a href="{{ url_for('tasks.delete_task', task_id=task_id) }}" class="btn btn-danger">X</a>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan=6>No tasks found</td></tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

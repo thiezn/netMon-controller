@@ -19,7 +19,3 @@ class AddTask(Form):
     recurrence_count = IntegerField('Recurrence', [validators.optional()])
     recurrence_time = IntegerField('Recurrence time (in sec)',
                                    [validators.optional()])
-
-class DeleteTask(Form):
-    """ Delete a task to the poller """
-    task_id = IntegerField('Task ID', [validators.Required()])

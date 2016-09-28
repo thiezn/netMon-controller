@@ -7,7 +7,15 @@
 {% endblock %}
 
 {% block content %}
-{% include "tasks/navigation.html" %}
+
+<div class="row">
+    <div class="col-lg-9">
+        <h2>Task details</h2>
+    </div>
+    <div class="col-lg-3" align="right">
+        <a href="{{ url_for('tasks.delete_task', task_id=tasks[0]._id) }}" class="btn btn-danger">Delete</a>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-lg-3">

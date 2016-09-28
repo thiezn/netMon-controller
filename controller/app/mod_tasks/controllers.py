@@ -3,7 +3,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from libs.tasks import TaskHandler, form_to_json_task
 from libs.database import Database
-from .forms import AddTask, DeleteTask
+from .forms import AddTask
 
 
 mod_tasks = Blueprint('tasks', __name__, url_prefix='/tasks')
@@ -15,7 +15,7 @@ database = Database()
 def get_tasks():
     tasks = task_handler.get_tasks()
 
-    return render_template('tasks/scheduled.html',
+    return render_template('tasks/tasks.html',
                            title='Scheduled tasks',
                            tasks=tasks)
 
@@ -38,7 +38,7 @@ def get_task(task_id):
 def get_results():
     results = task_handler.get_results()
     if 'error' in results:
-        return render_template('tasks/scheduled.html',
+        return render_template('tasks/tasks.html',
                                title='Scheduled tasks',
                                results=[results])
 
