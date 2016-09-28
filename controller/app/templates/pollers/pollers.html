@@ -15,16 +15,22 @@
                 <th>Port</th>
                 <th>Status</th>
                 <th>Online since</th>
-                <th>Last healthpoll</th>
+                <th>Last keepalive</th>
             </tr>
             {% for poller in pollers %}
                 <tr>
                     <td>{{ poller.name }}</td>
                     <td>{{ poller.ip }}</td>
                     <td>{{ poller.port }}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        {% if poller.online %}
+                            <span class="label label-success">Online</span>
+                        {% else %}
+                            <span class="label label-danger">Offline</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ poller.online_since }}</td>
+                    <td>{{ poller.last_keepalive }}</td>
                 </tr>
             {% else %}
                 <tr><td colspan=6>No pollers found</td></tr>

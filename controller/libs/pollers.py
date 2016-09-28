@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+from time import time
+
+
 class Poller:
     """A single poller connection"""
 
@@ -12,4 +15,6 @@ class Poller:
         """
         self.ip = ip
         self.port = port
-        self.port = name
+        self.name = name
+        self.online_since = time()
+        self.last_keepalive = None
