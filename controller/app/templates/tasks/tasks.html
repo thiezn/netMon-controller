@@ -11,6 +11,7 @@
     <div class="col-lg-9">
         <table class="table table-condensed">
             <tr>
+                <th>description</th>
                 <th>type</th>
                 <th>recurrence time (sec)</th>
                 <th>recurrence count</th>
@@ -20,6 +21,7 @@
             </tr>
             {% for task_id, data in tasks.items() %}
                 <tr>
+                    <td>{{ data[0].description }}</td>
                     <td>{{ data[0].type }}</td>
                     <td>{{ data[0].recurrence_time }}</td>
                     <td>{% if data[0].recurrence_count %}{{ data[0].recurrence_count }}{% else %}Infinite{% endif %}</td>

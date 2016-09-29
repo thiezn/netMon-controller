@@ -24,7 +24,7 @@ class Poller:
         if keepalive_interval:
             self.keepalive_interval = keepalive_interval
         else:
-            self.keepalive_interval = 120
+            self.keepalive_interval = 10
 
         self._is_online = True
 
