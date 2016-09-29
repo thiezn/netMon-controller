@@ -18,6 +18,7 @@
 
 <div class="row">
     <div class="col-lg-3">
+        <h3>description {{ tasks[0].description }}</h3>
         <table class="table table-condensed">
             <tr><th>ID</th><td>{{tasks[0]._id }}</td></tr>
             <tr><th>Type</th><td>{{ tasks[0].type }}</td></tr>
@@ -44,10 +45,7 @@
 var chart = c3.generate({
     bindto: '#task',
     data: {
-        json: {{ data[0][tasks[0]._id]|safe }},
-        keys: {
-            value: ['min', 'max', 'avg'],
-        }
+        json: {{ data|safe }},
     },
     axis: {
         x: {

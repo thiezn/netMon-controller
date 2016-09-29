@@ -11,6 +11,7 @@ class AddTask(Form):
                                      ('GetPage', 'GetPage'),
                                      ('Trace', 'Trace'),
                                      ('Ping', 'Ping')])
+    description = TextField('Description')
     device = TextField('Device')
     if_index = TextField('if_index')
     ssh_cmd = TextField('SSH Command')

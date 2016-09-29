@@ -12,6 +12,7 @@ def form_to_json_task(form):
     task_type = form.task_type.data
     run_at = form.run_at.data
     device = form.device.data
+    description = form.description.data
     recurrence_count = form.recurrence_count.data
     recurrence_time = form.recurrence_time.data
     if_index = form.if_index.data
@@ -24,6 +25,7 @@ def form_to_json_task(form):
     task['run_at'] = run_at
     task['recurrence_count'] = recurrence_count
     task['recurrence_time'] = recurrence_time
+    task['description'] = description
 
     if task_type == 'InterfaceOctetsProbe':
         if not if_index:
@@ -158,6 +160,7 @@ class TaskHandler:
         :param task: dictionary containing task object
         :param pollers: list of pollers to query, None=query all
         """
+        print(task)
         task['_id'] = self.generate_task_id(task)
         result = self._post('tasks', task)
         self.tasks[task['_id']] = task

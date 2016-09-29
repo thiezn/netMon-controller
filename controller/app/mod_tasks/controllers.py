@@ -26,7 +26,17 @@ def get_task(task_id):
     :return: List of the Task on each poller
     """
     tasks = task_handler.get_task(task_id)
-    data = task_handler.get_result(task_id)
+    results = task_handler.get_result(task_id)
+
+    data = {}
+    for poller in results:
+        data[poller['poller']] = []
+        for result in poller[task_id]:
+            if tasks[0]['type'] == 'Ping':
+                data[poller['poller']].append(result['avg'])
+
+    # data[0][tasks[0]._id]|safe
+
     return render_template('tasks/task.html',
                            title='Task',
                            tasks=tasks,
@@ -59,7 +69,6 @@ def add_tasks():
                                    form=form,
                                    error=result)
 
-        print(request.form['submit'])
         if request.form['submit'] == 'Add':
             return redirect(url_for('tasks.get_tasks'))
         elif request.form['submit'] == 'Repeat':
