@@ -72,7 +72,7 @@ def add_tasks():
         if request.form['submit'] == 'Add':
             return redirect(url_for('tasks.get_tasks'))
         elif request.form['submit'] == 'Repeat':
-            return redirect(url_for('tasks.add_tasks'))
+            return render_template('tasks/add.html', form=form, alert='Added task {} {}'.format(task['type'], task['description']))
 
     return render_template('tasks/add.html', form=form)
 
