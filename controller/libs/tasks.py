@@ -57,7 +57,6 @@ class TaskHandler:
 
         :param pollers: List of pollers. Poller is a tuple of (ip, port)
         """
-        # TODO: Currently only supporting a single poller
         self.pollers = []
         self.tasks = {}
         self._last_task_id = 0
@@ -161,6 +160,7 @@ class TaskHandler:
         """
         task['_id'] = self.generate_task_id(task)
         result = self._post('tasks', task)
+        self.tasks[task['_id']] = task
 
         # result can contain the data in case of run_instant.
         # it could also contain a dict with {'error': code}
@@ -171,7 +171,7 @@ class TaskHandler:
 
     def delete_task(self, task_id, pollers=None):
         """ Deletes a task from the poller(s) """
-
+        del self.tasks[task_id]
         return self._delete('tasks', {'task_id': task_id})
 
     def get_task(self, task_id, pollers=None):

@@ -1,21 +1,49 @@
 {% extends "base.html" %}
+
+{% block loadscripts %}
+<link href="/static/css/c3.min.css" rel="stylesheet" type="text/css">
+<script src="/static/js/c3.min.js" charset="utf-8"></script>
+{% endblock %}
+
 {% block content %}
+
+<div class="page-header">
+    <h2>Dashboard</h2>
+</div>
+
 <div class="row">
-    <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Area Chart</h3>
-            </div>
-            <div class="panel-body">
-                <div id="morris-area-chart"></div>
-            </div>
-        </div>
+    <div class="col-lg-6">
+        <h3>Pollers</h3>
+        <div id="poller-pie"></div>
+    </div>
+    <div class="col-lg-6">
+        <h3>Task Types</h3>
+        <div id="task-pie"></div>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-12">
-        <div><h3>Hello World</h3><br><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR></div>
-    </div>
-</div>
-<!-- /.row -->
+
+
+
+<script language="javascript">
+
+var pollers = c3.generate({
+    bindto: '#poller-pie',
+    data: {
+        columns: [
+            ['data1', 30],
+            ['data2', 120],
+        ],
+        type : 'pie'
+    }
+});
+
+var tasks = c3.generate({
+    bindto: '#task-pie',
+    data: {
+        json: {{ task_types|safe }},
+        type : 'pie'
+    }
+});
+
+</script>
 {% endblock %}

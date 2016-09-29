@@ -17,5 +17,6 @@ class AddTask(Form):
     url = TextField('URL')
     run_at = IntegerField('Run at', [validators.Required()])
     recurrence_count = IntegerField('Recurrence', [validators.optional()])
-    recurrence_time = IntegerField('Recurrence time (in sec)',
+    recurrence_time = IntegerField('Recurrence time (sec)',
                                    [validators.optional()])
+    pollers = SelectField('Run on', choices=[('all', 'All')])
